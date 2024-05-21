@@ -35,10 +35,10 @@ function parseUserForResponse (user: User) {
 }
 
 function hasExpectedFields(userData: any) {
-    return 'email' in userData &&
-    'username' in userData &&
-    'firstName' in userData &&
-    'lastName' in userData
+    return ('email' in userData && userData.email) &&
+    ('username' in userData && userData.username) &&
+    ('firstName' in userData && userData.firstName) &&
+    ('lastName' in userData && userData.lastName)
 }
 
 app.post('/users/new', async (req: Request, res: Response) => {
@@ -46,8 +46,8 @@ app.post('/users/new', async (req: Request, res: Response) => {
         const userData = req.body
 
         // Validate
-        const allFieldsIncluded = hasExpectedFields(userData)
-        if (!allFieldsIncluded) {
+        const fieldsValid = hasExpectedFields(userData)
+        if (!fieldsValid) {
             return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false })
         }
 
