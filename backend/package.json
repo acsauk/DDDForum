@@ -17,7 +17,9 @@
     "prettier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "test": "jest",
-    "test:dev": "jest --watchAll"
+    "test:dev": "jest --watchAll",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev"
   },
   "husky": {
     "hooks": {
