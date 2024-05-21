@@ -84,7 +84,32 @@ app.post('/users/edit/:userId', async (req: Request, res: Response) => {
 })
 
 app.get('/users', async (req: Request, res: Response) => {
-    //
+    try {
+        const hasEmail = 'email' in req.query
+        if (!hasEmail) {
+            return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false })
+        }
+
+        let email = req.query.email as string
+        console.log(req.query)
+        const user = await prisma.user.findFirst({ where: { email: email } })
+
+        if (!user) {
+            return res.status(409).json({ error: Errors.UserNotFound, data: undefined, success: false })
+        }
+
+        return res.status(201).json({
+            error: undefined,
+            data: parseUserForResponse(user),
+            success: true,
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: Errors.ServerError,
+            data: undefined,
+            success: false
+        })
+    }
 })
 
 const port = process.env.PORT || 3000;
