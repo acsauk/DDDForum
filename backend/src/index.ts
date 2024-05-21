@@ -28,19 +28,37 @@ function generateRandomPassword(length: number): string {
     return passwordArray.join('');
 }
 
-  function parseUserForResponse (user: User) {
+function parseUserForResponse (user: User) {
     const returnData = JSON.parse(JSON.stringify(user));
     delete returnData.password;
     return returnData;
-  }
+}
+
+function hasExpectedFields(userData: any) {
+    return 'email' in userData &&
+    'username' in userData &&
+    'firstName' in userData &&
+    'lastName' in userData
+}
 
 app.post('/users/new', async (req: Request, res: Response) => {
     try {
         const userData = req.body
 
-        const existingUserByEmail = await prisma.user.findFirst({ where: { email: req.body.email } })
+        // Validate
+        const allFieldsIncluded = hasExpectedFields(userData)
+        if (!allFieldsIncluded) {
+            return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false })
+        }
+
+        const existingUserByEmail = await prisma.user.findFirst({ where: { email: userData.email } })
         if (existingUserByEmail) {
             return res.status(409).json({ error: Errors.EmailAlreadyInUse, data: undefined, success: false })
+        }
+
+        const existingUserByUsername = await prisma.user.findFirst({ where: { username: userData.username } })
+        if (existingUserByUsername) {
+            return res.status(409).json({ error: Errors.UsernameAlreadyTaken, data: undefined, success: false })
         }
 
         const user = await prisma.user.create({
