@@ -95,7 +95,7 @@ app.get('/users', async (req: Request, res: Response) => {
         const user = await prisma.user.findFirst({ where: { email: email } })
 
         if (!user) {
-            return res.status(409).json({ error: Errors.UserNotFound, data: undefined, success: false })
+            return res.status(404).json({ error: Errors.UserNotFound, data: undefined, success: false })
         }
 
         return res.status(201).json({
