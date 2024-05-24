@@ -80,7 +80,49 @@ app.post('/users/new', async (req: Request, res: Response) => {
 })
 
 app.post('/users/edit/:userId', async (req: Request, res: Response) => {
-    //
+    try {
+        const userId = parseInt(req.params.userId)
+        const user = await prisma.user.findFirst({ where: { id: userId } })
+
+        if (!user) {
+            return res.status(404).json({ error: Errors.UserNotFound, data: undefined, success: false })
+        }
+
+        const updatedUserData = req.body
+
+        // Validate
+        const fieldsValid = hasExpectedFields(updatedUserData)
+        if (!fieldsValid) {
+            return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false })
+        }
+
+        const existingUserByEmail = await prisma.user.findFirst({ where: { email: updatedUserData.email } })
+        if (existingUserByEmail && user.id != existingUserByEmail.id) {
+            return res.status(409).json({ error: Errors.EmailAlreadyInUse, data: undefined, success: false })
+        }
+
+        const existingUserByUsername = await prisma.user.findFirst({ where: { username: updatedUserData.username } })
+        if (existingUserByUsername && user.id != existingUserByUsername.id) {
+            return res.status(409).json({ error: Errors.UsernameAlreadyTaken, data: undefined, success: false })
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: updatedUserData
+        })
+
+        return res.status(201).json({
+            error: undefined,
+            data: parseUserForResponse(updatedUser),
+            success: true,
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: Errors.ServerError,
+            data: undefined,
+            success: false
+        })
+    }
 })
 
 app.get('/users', async (req: Request, res: Response) => {
@@ -91,7 +133,6 @@ app.get('/users', async (req: Request, res: Response) => {
         }
 
         let email = req.query.email as string
-        console.log(req.query)
         const user = await prisma.user.findFirst({ where: { email: email } })
 
         if (!user) {
