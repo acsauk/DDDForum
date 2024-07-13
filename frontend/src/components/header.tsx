@@ -1,9 +1,10 @@
+/// <reference types="vite/client" />
 import React from 'react'
-import logo from "../assets/dddforumlogo.png"
+import logo from "../assets/DDD Forum Logo.png"
 import { Link } from 'react-router-dom'
 
 const Logo = () => (
-    <div id="app-logo">
+    <div id="app-logo" className="logo">
         <img src={logo}></img>
     </div>
 )
@@ -17,7 +18,7 @@ const TitleAndSubmission =() => (
 )
 
 const HeaderActionButton = ({ user }: { user: any }) => (
-    <div id="header-action-button">
+    <div id="header-action-button" className="header-actions">
         {user ? (
             <div>
                 <div>{user.username}</div>
@@ -37,7 +38,7 @@ const shouldShowActionButton = (pathName: string) => {
 
 export const Header = ({ pathName }: { pathName: string }) => {
     return (
-        <header id="header" className="flex align-cennter">
+        <header id="header" className="header">
             <Logo />
             <TitleAndSubmission />
             {shouldShowActionButton(location.pathname) ? (

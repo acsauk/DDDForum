@@ -5,8 +5,13 @@
   text-align: center;
 }
 
+.header {
+  display: flex;
+  text-align: left;
+  align-items: center;
+}
+
 .logo {
-  height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
@@ -33,10 +38,94 @@
   }
 }
 
+.header-actions {
+  margin-left: 40px;
+}
+
 .card {
   padding: 2em;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+.content-container {
+  text-align: left;
+}
+
+{{/* Main */}}
+
+.post-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.post-item-details {
+  display: flex;
+  margin-top: 5px;
+}
+
+.post-item-votes {
+  margin-right: 20px;
+}
+
+.vote-count {
+  text-align: center;
+}
+
+.post-switcher {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.seperator {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.vote-arrow {
+  filter: invert(97%) sepia(0%) saturate(0%) hue-rotate(53deg) brightness(103%) contrast(106%);
+}
+
+.vote-arrow__up {
+  transform: rotate(0.75turn);
+}
+
+.vote-arrow__down {
+  transform: rotate(0.25turn);
+}
+
+{{/* Register */}}
+
+form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  width: 500px; 
+  border: none;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.text-input {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 10px;
 }

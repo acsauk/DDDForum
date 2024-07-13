@@ -1,13 +1,13 @@
+/// <reference types="vite-plugin-svgr/client" />
 import React from 'react'
-
 import { Link } from "react-router-dom";
-import arrow from "../assets/arrow.svg";
+import VoteArrow from "../assets/arrow.svg?react";
 import moment from 'moment';
 
 type Vote = { id: number, postId: number, voteType: 'Upvote' | 'Downvote' };
-type Comment = {};
+type Comment = {content: string, memberId: number};
 
-type Post = {
+export type Post = {
   title: string;
   dateCreated: string;
   memberPostedBy: any;
@@ -27,24 +27,24 @@ export const PostsList = ({ posts }: { posts: Post[] }) => (
       <div className="post-item" key={key}>
         <div className="post-item-votes">
           <div className="post-item-upvote">
-            <img src={arrow} />
+            <VoteArrow className="vote-arrow vote-arrow__up" />
           </div>
-          <div>{computeVoteCount(post.votes)}</div>
+          <div className="vote-count">{computeVoteCount(post.votes)}</div>
           <div className="post-item-downvote">
-            <img src={arrow} />
+            <VoteArrow className="vote-arrow vote-arrow__down" />
           </div>
         </div>
         <div className="post-item-content">
           <div className="post-item-title">{post.title}</div>
           <div className="post-item-details">
-          <div>{moment(post.dateCreated).fromNow()}</div>
-          <Link to={`/member/${post.memberPostedBy.user.username}`}>
-            by {post.memberPostedBy.user.username}
-          </Link>
-          <div>
-            {post.comments.length}{" "}
-            {post.comments.length !== 1 ? `comments` : "comment"}
-          </div>
+            <div>{moment(post.dateCreated).fromNow()}</div> <span className="seperator">|</span>
+            <Link to={`/member/${post.memberPostedBy.user.username}`}>
+              by {post.memberPostedBy.user.username}
+            </Link> <span className="seperator">|</span>
+            <div>
+              {post.comments.length}{" "}
+              {post.comments.length !== 1 ? `comments` : "comment"}
+            </div>
           </div>
         </div>
       </div>
